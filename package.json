@@ -1,0 +1,55 @@
+{
+  "name": "@cloakui/nextjs-primitives",
+  "version": "0.0.1",
+  "description": "Extends CloakUI React Primitives with Next.js built-in components.",
+  "main": "dist/index",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "tsc -p tsconfig.json -w",
+    "build": "npm run build-ts",
+    "build-ts": "tsc-silent -p tsconfig.json --suppress",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "zzz-postpublish": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloak-labs/cloakui-nextjs-primitives.git"
+  },
+  "keywords": [
+    "react",
+    "next",
+    "nextjs",
+    "next.js",
+    "components",
+    "ui",
+    "ui kit",
+    "ui library"
+  ],
+  "author": "Kaelan Smith",
+  "license": "LGPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/cloak-labs/cloakui-nextjs-primitives/issues"
+  },
+  "homepage": "https://github.com/cloak-labs/cloakui-nextjs-primitives#readme",
+  "devDependencies": {
+    "@cloakui/types": "^0.0.1",
+    "@types/node": "^18.18.1",
+    "@types/react": "18.2.37",
+    "@types/react-dom": "^18.2.8",
+    "tsc-watch": "^5.0.3",
+    "typescript": "^5.3.2"
+  },
+  "peerDependencies": {
+    "next": ">= 13.x",
+    "@cloakui/react-primitives": ">= 0.0.1"
+  },
+  "dependencies": {
+    "@cloakui/styles": "workspace:*"
+  }
+}
