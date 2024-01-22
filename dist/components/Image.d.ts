@@ -59,7 +59,7 @@ declare const VALID_LOADING_VALUES: readonly ["lazy", "eager", any];
 type LoadingValue = (typeof VALID_LOADING_VALUES)[number];
 export type OnLoadingComplete = (img: HTMLImageElement) => void;
 export type ImageProps = Omit<TImageProps<CSSProperties>, "src" | "alt" | "width" | "height"> & NextImageProps;
-export declare const Image: React.ForwardRefExoticComponent<Omit<TImageProps<CSSProperties>, "src" | "alt" | "width" | "height"> & Omit<React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>, "ref" | "src" | "srcSet" | "alt" | "width" | "height" | "loading"> & {
+export declare const Image: React.ForwardRefExoticComponent<Omit<TImageProps<CSSProperties>, "height" | "width" | "alt" | "src"> & Omit<React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>, "height" | "width" | "ref" | "alt" | "src" | "srcSet" | "loading"> & {
     src: string | StaticImport;
     alt: string;
     width?: number | `${number}`;
