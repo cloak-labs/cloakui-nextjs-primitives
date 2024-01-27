@@ -5,6 +5,7 @@ import { Link } from "./Link";
 import type { TImageProps } from "@cloakui/types";
 import type { CSSProperties } from "react";
 import React from "react";
+import { cx } from "@cloakui/styles";
 
 // ============================== START copied Next.js Image types
 /* 
@@ -112,16 +113,15 @@ export const Image = React.forwardRef<HTMLImageElement, ImageProps>(
   ) => {
     const Wrapper = caption ? "figure" : "div"; // important for accessiblity reasons to wrap image with <figure> when it has an accompanying caption
     return (
-      <Wrapper className={cntrClassName} style={cntrStyle}>
+      <Wrapper
+        className={cx("group relative", cntrClassName)}
+        style={cntrStyle}
+      >
         <Link href={href} className="relative">
           <NextImage
             ref={ref}
             src={src}
             className={className}
-            // className={cx(
-            //   "relative w-full rounded-lg object-cover shadow-md shadow-root/15 dark:shadow-root/60 border border-root-invert/15 dark:border-root-dim",
-            //   className
-            // )}
             style={style}
             width={width}
             height={height}
@@ -138,11 +138,7 @@ export const Image = React.forwardRef<HTMLImageElement, ImageProps>(
         {caption && (
           <figcaption
             className={captionClassName}
-            // className={cx(
-            //   "text-sm text-center italic mt-2.5",
-            //   captionClassName
-            // )}
-            style={{ width: width || "100%", maxWidth: "100%" }}
+            // style={{ width: "100%", maxWidth: "100%" }}
           >
             {parseHtml(caption)}
           </figcaption>
