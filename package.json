@@ -47,7 +47,7 @@
   },
   "peerDependencies": {
     "next": ">= 13.x",
-    "@cloakui/react-primitives": ">= 0.0.2"
+    "@cloakui/react-primitives": ">= 0.0.3"
   },
   "dependencies": {
     "@cloakui/styles": "^0.0.1"
