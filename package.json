@@ -50,7 +50,7 @@
     "@cloakui/react-primitives": ">= 0.0.3"
   },
   "dependencies": {
-    "@cloakui/styles": "^0.0.1"
+    "@cloakui/styles": "^0.1.0"
   },
   "publishConfig": {
     "access": "public"
