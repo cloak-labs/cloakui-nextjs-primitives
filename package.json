@@ -1,6 +1,6 @@
 {
   "name": "@cloakui/nextjs-primitives",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Extends CloakUI React Primitives with Next.js built-in components.",
   "main": "dist/index",
   "types": "dist/index.d.ts",
