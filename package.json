@@ -47,10 +47,8 @@
   },
   "peerDependencies": {
     "next": ">= 13.x",
-    "@cloakui/react-primitives": ">= 0.0.3"
-  },
-  "dependencies": {
-    "@cloakui/styles": "^0.1.0"
+    "@cloakui/react-primitives": ">= 0.0.6",
+    "@cloakui/styles": ">= 0.2.0"
   },
   "publishConfig": {
     "access": "public"
