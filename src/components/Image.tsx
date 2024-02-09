@@ -1,7 +1,6 @@
 import NextImage, { ImageLoader } from "next/image";
 import { parseHtml } from "@cloakui/react-primitives";
 import { Link } from "./Link";
-// import { type ImageProps as NextImageProps } from "next/image";
 import type { TImageProps } from "@cloakui/types";
 import type { CSSProperties } from "react";
 import React from "react";
