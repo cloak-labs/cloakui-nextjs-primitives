@@ -2,7 +2,7 @@ import NextLink, { LinkProps as NextLinkProps } from "next/link";
 import {
   Link as BaseLink,
   LinkProps as BaseLinkProps,
-} from "@cloakui/react-primitives";
+} from "@cloakui/react-primitives/Link";
 
 export type LinkProps = Omit<BaseLinkProps, "internalLinkComponent"> &
   Omit<NextLinkProps, "href">;

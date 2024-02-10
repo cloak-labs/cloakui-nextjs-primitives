@@ -1,10 +1,16 @@
 import NextImage, { ImageLoader } from "next/image";
-import { parseHtml } from "@cloakui/react-primitives";
 import { Link } from "./Link";
 import type { TImageProps } from "@cloakui/types";
 import type { CSSProperties } from "react";
 import React from "react";
 import { cx } from "@cloakui/styles";
+import dynamic from "next/dynamic";
+
+const DynamicHtmlParser = dynamic(() =>
+  import("@cloakui/react-primitives/HtmlParser").then(
+    (module) => module.HtmlParser
+  )
+);
 
 // ============================== START copied Next.js Image types
 /* 
@@ -139,7 +145,7 @@ export const Image = React.forwardRef<HTMLImageElement, ImageProps>(
             className={captionClassName}
             // style={{ width: "100%", maxWidth: "100%" }}
           >
-            {parseHtml(caption)}
+            <DynamicHtmlParser>{caption}</DynamicHtmlParser>
           </figcaption>
         )}
       </Wrapper>
