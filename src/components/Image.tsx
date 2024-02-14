@@ -4,13 +4,7 @@ import type { TImageProps } from "@cloakui/types";
 import type { CSSProperties } from "react";
 import React from "react";
 import { cx } from "@cloakui/styles";
-import dynamic from "next/dynamic";
-
-const DynamicHtmlParser = dynamic(() =>
-  import("@cloakui/react-primitives/HtmlParser").then(
-    (module) => module.HtmlParser
-  )
-);
+import { DynamicHtmlParser } from "@cloakui/react-primitives/DynamicHtmlParser";
 
 // ============================== START copied Next.js Image types
 /* 
