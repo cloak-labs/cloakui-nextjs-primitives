@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/cloak-labs/cloakui-nextjs-primitives#readme",
   "devDependencies": {
-    "@cloakui/types": "^0.1.1",
+    "@cloakui/types": "^0.1.2",
     "@types/node": "^18.18.1",
     "@types/react": "18.2.37",
     "@types/react-dom": "^18.2.8",
@@ -48,7 +48,7 @@
   },
   "peerDependencies": {
     "next": ">= 13.x",
-    "@cloakui/react-primitives": ">= 0.2.1",
+    "@cloakui/react-primitives": ">= 0.2.2",
     "@cloakui/styles": ">= 0.3.0"
   },
   "publishConfig": {
