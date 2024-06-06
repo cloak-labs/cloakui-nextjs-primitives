@@ -48,8 +48,8 @@
   },
   "peerDependencies": {
     "next": ">= 13.x",
-    "@cloakui/react-primitives": ">= 0.2.2",
-    "@cloakui/styles": ">= 0.3.1"
+    "@cloakui/react-primitives": ">= 0.2.x",
+    "@cloakui/styles": ">= 0.3.x"
   },
   "publishConfig": {
     "access": "public"
