@@ -1,98 +1,23 @@
-import NextImage, { ImageLoader } from "next/image";
+import React from "react";
+import NextImage from "next/image";
 import { Link } from "./Link";
+import { DynamicHtmlParser } from "@cloakui/react-primitives/DynamicHtmlParser";
+import { cx } from "@cloakui/styles";
 import type { TImageProps } from "@cloakui/types";
 import type { CSSProperties } from "react";
-import React from "react";
-import { cx } from "@cloakui/styles";
-import { DynamicHtmlParser } from "@cloakui/react-primitives/DynamicHtmlParser";
-
-// ============================== START copied Next.js Image types
-/* 
-  The following types were copied from `next/image` in order to fix a strange
-  TypeScript error related to re-exporting Types from an external module.
-  Not an ideal solution, but nothing else worked.
-
-  Related GH issue: https://github.com/microsoft/TypeScript/issues/5711
-*/
-
-export interface StaticImageData {
-  src: string;
-  height: number;
-  width: number;
-  blurDataURL?: string;
-  blurWidth?: number;
-  blurHeight?: number;
-}
-
-export interface StaticRequire {
-  default: StaticImageData;
-}
-
-export type StaticImport = StaticRequire | StaticImageData;
-
-export type NextImageProps = Omit<
-  JSX.IntrinsicElements["img"],
-  "src" | "srcSet" | "ref" | "alt" | "width" | "height" | "loading"
-> & {
-  src: string | StaticImport;
-  alt: string;
-  width?: number | `${number}`;
-  height?: number | `${number}`;
-  fill?: boolean;
-  loader?: ImageLoader;
-  quality?: number | `${number}`;
-  priority?: boolean;
-  loading?: LoadingValue;
-  placeholder?: PlaceholderValue;
-  blurDataURL?: string;
-  unoptimized?: boolean;
-  /**
-   * @deprecated Use `onLoad` instead.
-   * @see https://nextjs.org/docs/app/api-reference/components/image#onload
-   */
-  onLoadingComplete?: OnLoadingComplete;
-  /**
-   * @deprecated Use `fill` prop instead of `layout="fill"` or change import to `next/legacy/image`.
-   * @see https://nextjs.org/docs/api-reference/next/legacy/image
-   */
-  layout?: string;
-  /**
-   * @deprecated Use `style` prop instead.
-   */
-  objectFit?: string;
-  /**
-   * @deprecated Use `style` prop instead.
-   */
-  objectPosition?: string;
-  /**
-   * @deprecated This prop does not do anything.
-   */
-  lazyBoundary?: string;
-  /**
-   * @deprecated This prop does not do anything.
-   */
-  lazyRoot?: string;
-};
-
-export type PlaceholderValue = "blur" | "empty" | `data:image/${string}`;
-
-const VALID_LOADING_VALUES = ["lazy", "eager", undefined] as const;
-type LoadingValue = (typeof VALID_LOADING_VALUES)[number];
-
-export type OnLoadingComplete = (img: HTMLImageElement) => void;
-// ============================== END copied Next.js Image types
 
 export type ImageProps = Omit<
   TImageProps<CSSProperties>,
   "src" | "alt" | "width" | "height"
 > &
-  NextImageProps;
+  React.ComponentProps<typeof NextImage>;
 
 export const Image = React.forwardRef<HTMLImageElement, ImageProps>(
   (
     {
       src,
       href,
+      target,
       width = 800,
       height = 400,
       alt,
@@ -113,10 +38,14 @@ export const Image = React.forwardRef<HTMLImageElement, ImageProps>(
     const Wrapper = caption ? "figure" : "div"; // important for accessiblity reasons to wrap image with <figure> when it has an accompanying caption
     return (
       <Wrapper
-        className={cx("group relative", cntrClassName)}
+        className={cx("group relative", cntrClassName)} // this relative wrapper is important
         style={cntrStyle}
       >
-        <Link href={href} className="relative">
+        <Link
+          href={href}
+          {...(href ? { target, className: "relative" } : {})}
+          fallbackAs={React.Fragment}
+        >
           <NextImage
             ref={ref}
             src={src}
