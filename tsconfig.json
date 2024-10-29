@@ -10,7 +10,10 @@
     "jsx": "react-jsx",
     "strict": false,
     "noEmit": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*"]
 }
