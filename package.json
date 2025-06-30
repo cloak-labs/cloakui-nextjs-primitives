@@ -41,6 +41,7 @@
   "homepage": "https://github.com/cloak-labs/cloakui-nextjs-primitives#readme",
   "devDependencies": {
     "@cloakui/types": "^0.1.4",
+    "@cloakui/utils": "^0.1.4",
     "@types/node": "^18.18.1",
     "@types/react": "18.3.7",
     "@types/react-dom": "^18.3.0",

@@ -1,7 +1,6 @@
 import React from "react";
 import NextImage from "next/image";
 import { Link } from "./Link";
-import { DynamicHtmlParser } from "@cloakui/react-primitives/DynamicHtmlParser";
 import { cx } from "@cloakui/styles";
 import type { TImageProps } from "@cloakui/types";
 import type { CSSProperties } from "react";
@@ -66,10 +65,10 @@ export const Image = React.forwardRef<HTMLImageElement, ImageProps>(
         {caption && (
           <figcaption
             className={captionClassName}
-            // style={{ width: "100%", maxWidth: "100%" }}
-          >
-            <DynamicHtmlParser>{caption}</DynamicHtmlParser>
-          </figcaption>
+            dangerouslySetInnerHTML={{
+              __html: caption,
+            }}
+          />
         )}
       </Wrapper>
     );
