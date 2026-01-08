@@ -30,6 +30,7 @@ export const Image = React.forwardRef<HTMLImageElement, ImageProps>(
       cntrClassName,
       cntrStyle,
       captionClassName,
+      onClick,
       ...props
     },
     ref
@@ -37,12 +38,18 @@ export const Image = React.forwardRef<HTMLImageElement, ImageProps>(
     const Wrapper = caption ? "figure" : "div"; // important for accessiblity reasons to wrap image with <figure> when it has an accompanying caption
     return (
       <Wrapper
-        className={cx("group relative", cntrClassName)} // this relative wrapper is important
+        className={cx(
+          "group relative flex flex-col",
+          onClick && "cursor-pointer",
+          cntrClassName
+        )} // this relative wrapper is important
         style={cntrStyle}
+        onClick={onClick}
       >
         <Link
           href={href}
-          {...(href ? { target, className: "relative" } : {})}
+          // it's important to conditionally add classNames only when href is present, because classNames can't be applied to a Fragment (the fallback):
+          {...(href ? { target, className: "h-full relative" } : {})}
           fallbackAs={React.Fragment}
         >
           <NextImage
