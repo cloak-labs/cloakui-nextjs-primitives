@@ -26,13 +26,14 @@ export const Link = React.forwardRef<React.ElementRef<"a">, LinkProps>(
     ref
   ) => {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
-    const _isAnchorLink = isAnchorLink(href, baseUrl);
+    const _isAnchorLink = React.useMemo(
+      () => isAnchorLink(href, baseUrl),
+      [href, baseUrl]
+    );
 
-    return (
-      <BaseLink
-        ref={ref}
-        href={href}
-        internalLinkComponent={withProps(NextLink, {
+    const internalLinkComponent = React.useMemo(
+      () =>
+        withProps(NextLink, {
           legacyBehavior,
           passHref,
           replace,
@@ -40,7 +41,24 @@ export const Link = React.forwardRef<React.ElementRef<"a">, LinkProps>(
           prefetch,
           shallow,
           locale,
-        })}
+        }),
+      [
+        legacyBehavior,
+        passHref,
+        replace,
+        _isAnchorLink,
+        scroll,
+        prefetch,
+        shallow,
+        locale,
+      ]
+    );
+
+    return (
+      <BaseLink
+        ref={ref}
+        href={href}
+        internalLinkComponent={internalLinkComponent}
         frontendUrl={baseUrl}
         {...props}
       />
