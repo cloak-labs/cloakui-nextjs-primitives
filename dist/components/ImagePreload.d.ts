@@ -5,3 +5,4 @@ import { type ImgProps } from "next/dist/shared/lib/get-img-props";
 export declare function ImagePreload({ imgAttributes }: {
     imgAttributes: ImgProps;
 }): import("react/jsx-runtime").JSX.Element;
+//# sourceMappingURL=ImagePreload.d.ts.map
