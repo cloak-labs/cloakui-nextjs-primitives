@@ -43,6 +43,24 @@ try {
  */
 export const useSoftPageRefresh = (pageData: Record<string, any>) => {
   const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const originalAsPathRef = React.useRef<string | null>(null);
+
+  const restoreOriginalUrl = React.useCallback(() => {
+    if (typeof window === "undefined") return;
+    if (!originalAsPathRef.current) return;
+
+    try {
+      window.history.replaceState(
+        window.history.state,
+        "",
+        originalAsPathRef.current,
+      );
+    } catch {
+      // ignore; not critical
+    } finally {
+      originalAsPathRef.current = null;
+    }
+  }, []);
 
   // Call router hooks at the top level - we need to call both to avoid conditional hook calls
   let appRouterInstance: any = null;
@@ -76,9 +94,34 @@ export const useSoftPageRefresh = (pageData: Record<string, any>) => {
 
     try {
       // Try pages router approach first (router.replace throws error in app router, so we catch it and then try the app router approach)
-      pagesRouterInstance.replace(pagesRouterInstance.asPath, undefined, {
-        scroll: false,
-      });
+      if (!pagesRouterInstance?.replace) {
+        throw new Error("Pages router not available");
+      }
+
+      const currentAsPath: string =
+        pagesRouterInstance.asPath ??
+        (typeof window !== "undefined"
+          ? `${window.location.pathname}${window.location.search}${window.location.hash}`
+          : "/");
+
+      // Next.js treats "hash-only" changes as non-navigations and won't re-fetch data.
+      // To force a true navigation (and re-fetch), we add a temporary query param and
+      // then restore the original URL once new data arrives.
+      originalAsPathRef.current = currentAsPath;
+
+      const [basePath, hashFragment] = currentAsPath.split("#");
+      const url = new URL(
+        basePath || "/",
+        typeof window !== "undefined" ? window.location.origin : "http://n",
+      );
+
+      url.searchParams.set("__spr", String(Date.now()));
+
+      const nextAsPath = `${url.pathname}${url.search}${
+        hashFragment ? `#${hashFragment}` : ""
+      }`;
+
+      pagesRouterInstance.replace(nextAsPath, nextAsPath, { scroll: false });
     } catch (error) {
       // If pages router approach failed, try app router approach
       try {
@@ -97,7 +140,8 @@ export const useSoftPageRefresh = (pageData: Record<string, any>) => {
 
   React.useEffect(() => {
     setIsRefreshing(false);
-  }, [pageData]);
+    restoreOriginalUrl();
+  }, [pageData, restoreOriginalUrl]);
 
   // Fallback: reset loading state after 40 seconds to prevent getting stuck
   React.useEffect(() => {
@@ -105,11 +149,12 @@ export const useSoftPageRefresh = (pageData: Record<string, any>) => {
       const timer = setTimeout(() => {
         console.warn("Soft refresh timeout - resetting loading state");
         setIsRefreshing(false);
+        restoreOriginalUrl();
       }, 40000);
 
       return () => clearTimeout(timer);
     }
-  }, [isRefreshing]);
+  }, [isRefreshing, restoreOriginalUrl]);
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
