@@ -1,3 +1,5 @@
+"use client";
+
 import { SoftPageRefreshButton as BaseSoftPageRefreshButton } from "@cloakui/react-primitives/SoftPageRefreshButton";
 import { useSoftPageRefresh } from "../hooks/useSoftPageRefresh";
 

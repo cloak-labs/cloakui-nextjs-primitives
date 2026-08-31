@@ -1,6 +1,6 @@
 {
   "name": "@cloakui/nextjs-primitives",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Extends CloakUI React Primitives with Next.js built-in components.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,6 +9,16 @@
       "require": "./dist/index.js",
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./*": {
+      "require": "./dist/components/*.js",
+      "import": "./dist/components/*.js",
+      "types": "./dist/components/*.d.ts"
+    },
+    "./hooks/*": {
+      "require": "./dist/hooks/*.js",
+      "import": "./dist/hooks/*.js",
+      "types": "./dist/hooks/*.d.ts"
     }
   },
   "scripts": {
@@ -43,13 +53,15 @@
     "@cloakui/types": "^0.1.4",
     "@cloakui/utils": "^0.1.4",
     "@types/node": "^18.18.1",
-    "@types/react": "18.3.7",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "tsc-watch": "^5.0.3",
     "typescript": "^5.3.2"
   },
   "peerDependencies": {
     "next": ">= 13.x",
+    "react": ">= 19.0.0",
+    "react-dom": ">= 19.0.0",
     "@cloakui/react-primitives": ">= 0.3.x",
     "@cloakui/styles": ">= 0.3.x"
   },

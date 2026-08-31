@@ -1,19 +1,6 @@
+"use client";
 import React from "react";
-// Try to import both routers and detect which one is available
-let pagesRouter = null;
-let appRouter = null;
-try {
-    pagesRouter = require("next/router");
-}
-catch {
-    // Pages router not available
-}
-try {
-    appRouter = require("next/navigation");
-}
-catch {
-    // App router not available
-}
+import { useNextRouterHooks } from "./useNextRouterHooks";
 /**
  * A hook that provides soft page refresh functionality for Next.js applications, meant to
  * speed up development when making changes in a CMS, as it's faster than the default hard refresh.
@@ -42,6 +29,7 @@ catch {
 export const useSoftPageRefresh = (pageData) => {
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const originalAsPathRef = React.useRef(null);
+    const { pagesRouter, appRouter } = useNextRouterHooks();
     const restoreOriginalUrl = React.useCallback(() => {
         if (typeof window === "undefined")
             return;
@@ -57,57 +45,31 @@ export const useSoftPageRefresh = (pageData) => {
             originalAsPathRef.current = null;
         }
     }, []);
-    // Call router hooks at the top level - we need to call both to avoid conditional hook calls
-    let appRouterInstance = null;
-    let pagesRouterInstance = null;
-    // Always try to call both router hooks to maintain consistent hook order
-    try {
-        if (appRouter?.useRouter) {
-            appRouterInstance = appRouter.useRouter();
-        }
-    }
-    catch (error) {
-        // App router not available
-    }
-    try {
-        if (pagesRouter?.useRouter) {
-            pagesRouterInstance = pagesRouter.useRouter();
-        }
-    }
-    catch (error) {
-        // Pages router not available
-    }
     const refresh = React.useCallback(() => {
-        if (!appRouterInstance && !pagesRouterInstance) {
+        if (!appRouter && !pagesRouter) {
             console.warn("No router available for refresh");
             return;
         }
-        // Set loading state first
         setIsRefreshing(true);
         try {
-            // Try pages router approach first (router.replace throws error in app router, so we catch it and then try the app router approach)
-            if (!pagesRouterInstance?.replace) {
+            if (!pagesRouter?.replace) {
                 throw new Error("Pages router not available");
             }
-            const currentAsPath = pagesRouterInstance.asPath ??
+            const currentAsPath = pagesRouter.asPath ??
                 (typeof window !== "undefined"
                     ? `${window.location.pathname}${window.location.search}${window.location.hash}`
                     : "/");
-            // Next.js treats "hash-only" changes as non-navigations and won't re-fetch data.
-            // To force a true navigation (and re-fetch), we add a temporary query param and
-            // then restore the original URL once new data arrives.
             originalAsPathRef.current = currentAsPath;
             const [basePath, hashFragment] = currentAsPath.split("#");
             const url = new URL(basePath || "/", typeof window !== "undefined" ? window.location.origin : "http://n");
             url.searchParams.set("__spr", String(Date.now()));
             const nextAsPath = `${url.pathname}${url.search}${hashFragment ? `#${hashFragment}` : ""}`;
-            pagesRouterInstance.replace(nextAsPath, nextAsPath, { scroll: false });
+            pagesRouter.replace(nextAsPath, nextAsPath, { scroll: false });
         }
-        catch (error) {
-            // If pages router approach failed, try app router approach
+        catch {
             try {
-                if (appRouterInstance?.refresh) {
-                    appRouterInstance.refresh();
+                if (appRouter?.refresh) {
+                    appRouter.refresh();
                 }
                 else {
                     console.warn("No suitable refresh method found");
@@ -119,12 +81,11 @@ export const useSoftPageRefresh = (pageData) => {
                 setIsRefreshing(false);
             }
         }
-    }, [appRouterInstance, pagesRouterInstance]);
+    }, [appRouter, pagesRouter]);
     React.useEffect(() => {
         setIsRefreshing(false);
         restoreOriginalUrl();
     }, [pageData, restoreOriginalUrl]);
-    // Fallback: reset loading state after 40 seconds to prevent getting stuck
     React.useEffect(() => {
         if (isRefreshing) {
             const timer = setTimeout(() => {

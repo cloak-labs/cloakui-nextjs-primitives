@@ -1,26 +1,21 @@
-import { jsx as _jsx } from "react/jsx-runtime";
-import Head from "next/head";
-/**
- * This component is taken and adapted from Next.js internals. It enables us to manually preload images outside of the Next.js image component (eg. to preload CSS background images).
- */
-export function ImagePreload({ imgAttributes }) {
-    const opts = {
+import { preload } from "react-dom";
+function getPreloadOptions(imgAttributes) {
+    return {
         as: "image",
         imageSrcSet: imgAttributes.srcSet,
         imageSizes: imgAttributes.sizes,
         crossOrigin: imgAttributes.crossOrigin,
         referrerPolicy: imgAttributes.referrerPolicy,
-        // TODO: in React 19.0.0 or newer, we must use camelCase (eg. `fetchPriority`)
-        fetchpriority: imgAttributes.fetchPriority,
+        fetchPriority: imgAttributes.fetchPriority,
     };
-    return (_jsx(Head, { children: _jsx("link", { rel: "preload", 
-            // Note how we omit the `href` attribute, as it would only be relevant
-            // for browsers that do not support `imagesrcset`, and in those cases
-            // it would cause the incorrect image to be preloaded.
-            //
-            // https://html.spec.whatwg.org/multipage/semantics.html#attr-link-imagesrcset
-            href: imgAttributes.srcSet ? undefined : imgAttributes.src, ...opts }, "__nimg-" +
-            imgAttributes.src +
-            imgAttributes.srcSet +
-            imgAttributes.sizes) }));
+}
+/**
+ * Preloads an image outside of the Next.js Image component (e.g. CSS background images).
+ * Uses React 19's `preload()` to hoist a `<link rel="preload">` into the document head.
+ */
+export function ImagePreload({ imgAttributes }) {
+    if (imgAttributes.src) {
+        preload(imgAttributes.src, getPreloadOptions(imgAttributes));
+    }
+    return null;
 }
